@@ -31,6 +31,14 @@ class Register_Blocks {
 	public $lead_signup_shortcode;
 
 	/**
+	 * Omnibar_shortcode
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $omnibar_shortcode;
+
+	/**
 	 * __construct function.
 	 *
 	 * @access public
@@ -38,12 +46,20 @@ class Register_Blocks {
 	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
+
+		// IMPress Lead Signup Block
 		if ( $this->idx_api->platinum_account_type() ) {
 			$this->lead_signup_shortcode = new \IDX\Shortcodes\Impress_Lead_Signup_Shortcode();
 			add_action( 'init', [ $this, 'impress_lead_signup_block_init' ] );
 		}
+
+		// IMPress Lead Login Block
 		$this->lead_login_shortcode = new \IDX\Shortcodes\Impress_Lead_Login_Shortcode();
 		add_action( 'init', [ $this, 'impress_lead_login_block_init' ] );
+
+		// IMPress Omnibar Block
+		$this->omnibar_shortcode = new \IDX\Widgets\Omnibar\IDX_Omnibar_Widget();
+		add_action( 'init', [ $this, 'impress_omnibar_block_init' ] );
 	}
 
 	/**
@@ -153,4 +169,54 @@ class Register_Blocks {
 	public function impress_lead_login_block_render( $attributes ) {
 		return $this->lead_login_shortcode->lead_login_shortcode( $attributes );
 	}
+
+
+		/**
+	 * Impress_omnibar_block_init function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function impress_omnibar_block_init() {
+		// Register block script.
+		wp_register_script(
+			'impress-omnibar-block',
+			plugins_url( '/impress-omnibar/script.js', __FILE__ ),
+			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			'1.0',
+			false
+		);
+		// Register block and attributes.
+		register_block_type(
+			'idx-broker-platinum/impress-omnibar-block',
+			[
+				'attributes' => [
+					'styles' => [
+						'type' => 'int',
+					],
+					'extra' => [
+						'type' => 'int',
+					],
+					'min_price' => [
+						'type' => 'int',
+					],
+				],
+				'editor_script'   => 'impress-omnibar-block',
+				'render_callback' => [ $this, 'impress_omnibar_block_render' ],
+			]
+		);
+	}
+
+	/**
+	 * Impress_omnibar_block_render function.
+	 *
+	 * @access public
+	 * @param mixed $attributes - Widget attributes.
+	 * @return string
+	 */
+	public function impress_omnibar_block_render( $attributes ) {
+		return $this->omnibar_shortcode->create_omnibar->add_omnibar_shortcode( $attributes );
+	}
+
+
 }
