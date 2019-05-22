@@ -1,0 +1,11 @@
+.idx-wrapper-tag-block-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	color: black;
+	background-color: white;
+	height: 100px;
+	font-family: Futura,Trebuchet MS,Arial,sans-serif; 
+	border: 5px solid #3ca5d6;
+}

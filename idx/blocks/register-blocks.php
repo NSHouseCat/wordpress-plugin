@@ -60,6 +60,9 @@ class Register_Blocks {
 		// IMPress Omnibar Block
 		$this->omnibar_shortcode = new \IDX\Widgets\Omnibar\IDX_Omnibar_Widget();
 		add_action( 'init', [ $this, 'impress_omnibar_block_init' ] );
+
+		// IDX Wrapper Tags
+		add_action( 'init', [ $this, 'idx_wrapper_tags_block_init' ] );
 	}
 
 	/**
@@ -218,5 +221,35 @@ class Register_Blocks {
 		return $this->omnibar_shortcode->create_omnibar->add_omnibar_shortcode( $attributes );
 	}
 
+
+
+	/**
+	 * Idx_wrapper_tags_block_init function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function idx_wrapper_tags_block_init() {
+		// Register block script.
+		wp_register_script(
+			'idx-wrapper-tags-block',
+			plugins_url( '/idx-wrapper-tags/script.js', __FILE__ ),
+			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			'1.0',
+			false
+		);
+		// Register block and attributes.
+		register_block_type(
+			'idx-broker-platinum/idx-wrapper-tags-block',
+			[
+				'editor_script' => 'idx-wrapper-tags-block',
+			]
+		);
+		wp_enqueue_style( 'editor-styles', plugins_url( '/idx-wrapper-tags/editor-style.css', __FILE__ ), false, '1.0', 'all' );
+
+		$idx_wrapper_tags_image_url = plugins_url( '/idx-wrapper-tags/small-idx-logo.png', __FILE__ );
+		wp_localize_script( 'idx-wrapper-tags-block', 'idx_wrapper_tags_image_url', $idx_wrapper_tags_image_url );
+		wp_enqueue_script( 'idx-wrapper-tags-block' );
+	}
 
 }
