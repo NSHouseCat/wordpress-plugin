@@ -39,6 +39,14 @@ class Register_Blocks {
 	public $omnibar_shortcode;
 
 	/**
+	 * Impress_shortcode
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $impress_shortcodes;
+
+	/**
 	 * __construct function.
 	 *
 	 * @access public
@@ -46,6 +54,7 @@ class Register_Blocks {
 	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
+		$this->impress_shortcodes = new \IDX\Shortcodes\Register_Impress_Shortcodes();
 
 		// IMPress Lead Signup Block
 		if ( $this->idx_api->platinum_account_type() ) {
@@ -54,7 +63,6 @@ class Register_Blocks {
 		}
 
 		// IMPress Lead Login Block
-		$this->lead_login_shortcode = new \IDX\Shortcodes\Impress_Lead_Login_Shortcode();
 		add_action( 'init', [ $this, 'impress_lead_login_block_init' ] );
 
 		// IMPress Omnibar Block
@@ -170,7 +178,7 @@ class Register_Blocks {
 	 * @return string
 	 */
 	public function impress_lead_login_block_render( $attributes ) {
-		return $this->lead_login_shortcode->lead_login_shortcode( $attributes );
+		return $this->impress_shortcodes->lead_login_shortcode( $attributes );
 	}
 
 
