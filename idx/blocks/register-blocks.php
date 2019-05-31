@@ -69,8 +69,11 @@ class Register_Blocks {
 		$this->omnibar_shortcode = new \IDX\Widgets\Omnibar\IDX_Omnibar_Widget();
 		add_action( 'init', [ $this, 'impress_omnibar_block_init' ] );
 
-		// IDX Wrapper Tags
+		// IDX Wrapper Tags 
 		add_action( 'init', [ $this, 'idx_wrapper_tags_block_init' ] );
+
+		// IMPress Carousel
+		add_action( 'init', [ $this, 'impress_carousel_block_init' ] );
 	}
 
 	/**
@@ -117,7 +120,7 @@ class Register_Blocks {
 			]
 		);
 
-		$available_agents = [ 'agents_list' => $this->lead_signup_shortcode->get_agents_select_list() ];
+		$available_agents = $this->get_agents_select_list();
 		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_agent_list', $available_agents );
 		wp_enqueue_script( 'impress-lead-signup-block' );
 
@@ -260,4 +263,119 @@ class Register_Blocks {
 		wp_enqueue_script( 'idx-wrapper-tags-block' );
 	}
 
+
+
+	/**
+	 * Impress_carousel_block_init function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function impress_carousel_block_init() {
+		// Register block script.
+		wp_register_script(
+			'impress-carousel-block',
+			plugins_url( '/impress-carousel/script.js', __FILE__ ),
+			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			'1.0',
+			false
+		);
+		// Register block and attributes.
+		register_block_type(
+			'idx-broker-platinum/impress-carousel-block',
+			[
+				'attributes' => [
+					'max' => [
+						'type' => 'int',
+					],
+					'display' => [
+						'type' => 'int',
+					],
+					'autoplay' => [
+						'type' => 'int',
+					],
+					'order' => [
+						'type' => 'string',
+					],
+					'property_type' => [
+						'type' => 'string',
+					],
+					'styles' => [
+						'type' => 'int',
+					],
+					'new_window' => [
+						'type' => 'int',
+					],
+					'saved_link_id' => [
+						'type' => 'string',
+					],
+					'agent_id' => [
+						'type' => 'string',
+					],
+				],
+				'editor_script'   => 'impress-carousel-block',
+				'render_callback' => [ $this, 'impress_carousel_block_render' ],
+			]
+		);
+
+		$available_agents = $this->get_agents_select_list();
+		wp_localize_script( 'impress-lead-signup-block', 'impress_carousel_agent_list', $available_agents );
+		wp_enqueue_script( 'impress-lead-signup-block' );
+
+		$saved_links_list = $this->get_saved_links_list();
+		wp_localize_script( 'impress-carousel-block', 'impress_carousel_saved_links', $saved_links_list );
+		wp_enqueue_script( 'impress-carousel-block' );
+	}
+
+	/**
+	 * Impress_carousel_block_render function.
+	 *
+	 * @access public
+	 * @param mixed $attributes - Widget attributes.
+	 * @return string
+	 */
+	public function impress_carousel_block_render( $attributes ) {
+		return $this->impress_shortcodes->property_carousel_shortcode( $attributes );
+		//return $this->lead_signup_shortcode->shortcode_output( $attributes );
+	}
+
+
+	public function get_saved_links_list() {
+		$saved_links = $this->idx_api->idx_api_get_savedlinks();
+
+		if ( ! is_array( $saved_links ) ) {
+			return;
+		}
+
+		$parsed_saved_links = array();
+
+		foreach ( $saved_links as $saved_link ) {
+			$link_label = empty( $saved_link->linkTitle ) ? $saved_link->linkName : $saved_link->linkTitle;
+			array_push( $parsed_saved_links, ['label' => $link_label, 'value' => $saved_link->id] );
+		}
+		return $parsed_saved_links;
+	}
+
+
+	public function get_agents_select_list() {
+		$agent_api_data = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$agents_array = array();
+		array_push(
+			$agents_array,
+			array(
+				'label' => 'All',
+				'value' => '',
+			)
+		);
+
+		foreach ( $agent_api_data['agent'] as $current_agent ) {
+			array_push( $agents_array, array( 'label' => $current_agent['agentDisplayName'], 'value' => $current_agent['agentID'] ) );
+		}
+
+		if ( ! is_array( $agents_array ) ) {
+			return;
+		}
+
+		return $agents_array;
+	}
 }
