@@ -56,26 +56,26 @@ class Register_Blocks {
 		$this->idx_api = new \IDX\Idx_Api();
 		$this->impress_shortcodes = new \IDX\Shortcodes\Register_Impress_Shortcodes();
 
-		// IMPress Lead Signup Block
+		// IMPress Lead Signup Block.
 		if ( $this->idx_api->platinum_account_type() ) {
 			$this->lead_signup_shortcode = new \IDX\Shortcodes\Impress_Lead_Signup_Shortcode();
 			add_action( 'init', [ $this, 'impress_lead_signup_block_init' ] );
 		}
 
-		// IMPress Lead Login Block
+		// IMPress Lead Login Block.
 		add_action( 'init', [ $this, 'impress_lead_login_block_init' ] );
 
-		// IMPress Omnibar Block
+		// IMPress Omnibar Block.
 		$this->omnibar_shortcode = new \IDX\Widgets\Omnibar\IDX_Omnibar_Widget();
 		add_action( 'init', [ $this, 'impress_omnibar_block_init' ] );
 
-		// IDX Wrapper Tags 
+		// IDX Wrapper Tags.
 		add_action( 'init', [ $this, 'idx_wrapper_tags_block_init' ] );
 
-		// IMPress Carousel
+		// IMPress Carousel.
 		add_action( 'init', [ $this, 'impress_carousel_block_init' ] );
 
-		// IMPress Showcase
+		// IMPress Showcase.
 		add_action( 'init', [ $this, 'impress_showcase_block_init' ] );
 	}
 
@@ -192,7 +192,7 @@ class Register_Blocks {
 	}
 
 
-		/**
+	/**
 	 * Impress_omnibar_block_init function.
 	 *
 	 * @access public
@@ -352,7 +352,7 @@ class Register_Blocks {
 	}
 
 
-/**
+	/**
 	 * Impress_showcase_block_init function.
 	 *
 	 * @access public
@@ -407,7 +407,7 @@ class Register_Blocks {
 				'render_callback' => [ $this, 'impress_showcase_block_render' ],
 			]
 		);
-		
+
 		$available_agents = $this->get_agents_select_list();
 		wp_localize_script( 'impress-lead-signup-block', 'impress_showcase_agent_list', $available_agents );
 		wp_enqueue_script( 'impress-lead-signup-block' );
@@ -430,13 +430,14 @@ class Register_Blocks {
 	 */
 	public function impress_showcase_block_render( $attributes ) {
 		return $this->impress_shortcodes->property_showcase_shortcode( $attributes );
-		//return $this->lead_signup_shortcode->shortcode_output( $attributes );
 	}
 
-
-	// Helper functions to populate saved links and agent select lists
-
-
+	/**
+	 * Get_saved_links_list function.
+	 *
+	 * @access public
+	 * @return array
+	 */
 	public function get_saved_links_list() {
 
 		$saved_links_list = [];
@@ -461,6 +462,12 @@ class Register_Blocks {
 	}
 
 
+	/**
+	 * Get_agents_select_list function.
+	 *
+	 * @access public
+	 * @return array
+	 */
 	public function get_agents_select_list() {
 
 		$agents_list = [
