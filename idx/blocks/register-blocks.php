@@ -74,6 +74,9 @@ class Register_Blocks {
 
 		// IMPress Carousel
 		add_action( 'init', [ $this, 'impress_carousel_block_init' ] );
+
+		// IMPress Showcase
+		add_action( 'init', [ $this, 'impress_showcase_block_init' ] );
 	}
 
 	/**
@@ -171,6 +174,10 @@ class Register_Blocks {
 				'render_callback' => [ $this, 'impress_lead_login_block_render' ],
 			]
 		);
+
+		if ( is_admin() ) {
+			wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.css', dirname( __FILE__ ) ) );
+		}
 	}
 
 	/**
@@ -219,6 +226,11 @@ class Register_Blocks {
 				'render_callback' => [ $this, 'impress_omnibar_block_render' ],
 			]
 		);
+
+		if ( is_admin() ) {
+			wp_enqueue_style( 'idx-omnibar', plugins_url( '../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) );
+		}
+
 	}
 
 	/**
@@ -325,6 +337,7 @@ class Register_Blocks {
 		$saved_links_list = $this->get_saved_links_list();
 		wp_localize_script( 'impress-carousel-block', 'impress_carousel_saved_links', $saved_links_list );
 		wp_enqueue_script( 'impress-carousel-block' );
+
 	}
 
 	/**
@@ -336,46 +349,145 @@ class Register_Blocks {
 	 */
 	public function impress_carousel_block_render( $attributes ) {
 		return $this->impress_shortcodes->property_carousel_shortcode( $attributes );
+	}
+
+
+/**
+	 * Impress_showcase_block_init function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function impress_showcase_block_init() {
+		// Register block script.
+		wp_register_script(
+			'impress-showcase-block',
+			plugins_url( '/impress-showcase/script.js', __FILE__ ),
+			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			'1.0',
+			false
+		);
+		// Register block and attributes.
+		register_block_type(
+			'idx-broker-platinum/impress-showcase-block',
+			[
+				'attributes' => [
+					'max' => [
+						'type' => 'int',
+					],
+					'use_rows' => [
+						'type' => 'int',
+					],
+					'num_per_row' => [
+						'type' => 'int',
+					],
+					'show_image' => [
+						'type' => 'int',
+					],
+					'order' => [
+						'type' => 'string',
+					],
+					'property_type' => [
+						'type' => 'string',
+					],
+					'saved_link_id' => [
+						'type' => 'string',
+					],
+					'agent_id' => [
+						'type' => 'string',
+					],
+					'styles' => [
+						'type' => 'int',
+					],
+					'new_window' => [
+						'type' => 'int',
+					],
+				],
+				'editor_script'   => 'impress-showcase-block',
+				'render_callback' => [ $this, 'impress_showcase_block_render' ],
+			]
+		);
+		
+		$available_agents = $this->get_agents_select_list();
+		wp_localize_script( 'impress-lead-signup-block', 'impress_showcase_agent_list', $available_agents );
+		wp_enqueue_script( 'impress-lead-signup-block' );
+
+		$saved_links_list = $this->get_saved_links_list();
+		wp_localize_script( 'impress-showcase-block', 'impress_showcase_saved_links', $saved_links_list );
+		wp_enqueue_script( 'impress-showcase-block' );
+
+		if ( is_admin() ) {
+			wp_enqueue_style( 'impress-showcase', plugins_url( '../assets/css/widgets/impress-showcase.css', dirname( __FILE__ ) ) );
+		}
+	}
+
+	/**
+	 * Impress_showcase_block_render function.
+	 *
+	 * @access public
+	 * @param mixed $attributes - Widget attributes.
+	 * @return string
+	 */
+	public function impress_showcase_block_render( $attributes ) {
+		return $this->impress_shortcodes->property_showcase_shortcode( $attributes );
 		//return $this->lead_signup_shortcode->shortcode_output( $attributes );
 	}
 
 
+	// Helper functions to populate saved links and agent select lists
+
+
 	public function get_saved_links_list() {
-		$saved_links = $this->idx_api->idx_api_get_savedlinks();
+
+		$saved_links_list = [];
+
+		// Check for API key before making call.
+		if ( get_option( 'idx_broker_apikey' ) ) {
+			$saved_links = $this->idx_api->idx_api_get_savedlinks();
+			// Check for error in returned API response.
+			if ( ! is_wp_error( $saved_links ) ) {
+				foreach ( $saved_links as $saved_link ) {
+					$link_label = empty( $saved_link->linkTitle ) ? $saved_link->linkName : $saved_link->linkTitle;
+					array_push( $saved_links_list, ['label' => $link_label, 'value' => $saved_link->id] );
+				}
+			}
+		}
 
 		if ( ! is_array( $saved_links ) ) {
-			return;
+			return [];
 		}
 
-		$parsed_saved_links = array();
-
-		foreach ( $saved_links as $saved_link ) {
-			$link_label = empty( $saved_link->linkTitle ) ? $saved_link->linkName : $saved_link->linkTitle;
-			array_push( $parsed_saved_links, ['label' => $link_label, 'value' => $saved_link->id] );
-		}
-		return $parsed_saved_links;
+		return $saved_links_list;
 	}
 
 
 	public function get_agents_select_list() {
-		$agent_api_data = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-		$agents_array = array();
-		array_push(
-			$agents_array,
-			array(
+
+		$agents_list = [
+			[
 				'label' => 'All',
 				'value' => '',
-			)
-		);
+			],
+		];
 
-		foreach ( $agent_api_data['agent'] as $current_agent ) {
-			array_push( $agents_array, array( 'label' => $current_agent['agentDisplayName'], 'value' => $current_agent['agentID'] ) );
+		if ( get_option( 'idx_broker_apikey' ) ) {
+			$agent_api_data = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+			if ( ! is_wp_error( $agent_api_data ) ) {
+				foreach ( $agent_api_data['agent'] as $current_agent ) {
+					array_push( $agents_list, array( 'label' => $current_agent['agentDisplayName'], 'value' => $current_agent['agentID'] ) );
+				}
+			}
 		}
 
-		if ( ! is_array( $agents_array ) ) {
-			return;
+		if ( ! is_array( $agents_list ) ) {
+			return [
+				[
+					'label' => 'All',
+					'value' => '',
+				],
+			];
 		}
 
-		return $agents_array;
+		return $agents_list;
 	}
 }
