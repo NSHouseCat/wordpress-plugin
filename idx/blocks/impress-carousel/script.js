@@ -58,10 +58,16 @@
 			const sortOptions = [{label: 'Default', value: 'default'}, {label: 'Highest to Lowest Price', value: 'high-low'}, {label: 'Lowest to Highest Price', value: 'low-high'}];
 		
 			return [
-				el( ServerSideRender, {
-					block: 'idx-broker-platinum/impress-carousel-block',
-					attributes: props.attributes,
-				} ),
+				// el( ServerSideRender, {
+				// 	block: 'idx-broker-platinum/impress-carousel-block',
+				// 	attributes: props.attributes,
+				// } ),
+
+				el( "div", {
+					className: "impress-carousel-block-preview"
+				}, el("img", {
+					src: impress_carousel_image_url
+				}), el("div", null, "")),
 
 				el( InspectorControls, {},
 					el( SelectControl, {

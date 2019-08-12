@@ -10,13 +10,9 @@
 
 		edit: function( props ) {
 			return [
-				el( "div", {
-					className: "idx-wrapper-tag-block-preview"
-				}, el("img", {
-					src: idx_wrapper_tags_image_url,
-					height: "45",
-					width: "110"
-				}), el("div", null, "IDX Broker Wrapper Tags"))
+				el( "div", null, el("img", {
+					src: idx_wrapper_tags_image_url
+				}), el("div", null, ""))
 			]
 		},
 

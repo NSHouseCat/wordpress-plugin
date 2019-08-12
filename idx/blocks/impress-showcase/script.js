@@ -62,10 +62,13 @@
 			const sortOptions = [{label: 'Default', value: 'default'}, {label: 'Highest to Lowest Price', value: 'high-low'}, {label: 'Lowest to Highest Price', value: 'low-high'}];
 		
 			return [
-				el( ServerSideRender, {
-					block: 'idx-broker-platinum/impress-showcase-block',
-					attributes: props.attributes,
-				} ),
+				// el( ServerSideRender, {
+				// 	block: 'idx-broker-platinum/impress-showcase-block',
+				// 	attributes: props.attributes,
+				// } ),
+				el( "div", null, el("img", {
+					src: impress_showcase_image_url
+				})),
 
 				el( InspectorControls, {},
 					el( SelectControl, {

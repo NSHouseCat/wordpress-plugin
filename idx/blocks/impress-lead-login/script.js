@@ -28,10 +28,13 @@
 
 		edit: function( props ) {
 			return [
-				el( ServerSideRender, {
-					block: 'idx-broker-platinum/impress-lead-login-block',
-					attributes: props.attributes,
-				} ),
+				// el( ServerSideRender, {
+				// 	block: 'idx-broker-platinum/impress-lead-login-block',
+				// 	attributes: props.attributes,
+				// } ),
+				el( "div", null, el("img", {
+					src: lead_login_image_url
+				}), el("div", null, "")),
 
 				el( InspectorControls, {},
 					el( Checkbox, {

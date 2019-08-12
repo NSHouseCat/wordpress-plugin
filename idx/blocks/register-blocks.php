@@ -125,6 +125,10 @@ class Register_Blocks {
 
 		$available_agents = $this->get_agents_select_list();
 		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_agent_list', $available_agents );
+
+		$lead_signup_image_url = plugins_url( '/impress-lead-signup/lead-signup-placeholder.png', __FILE__ );
+		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_image_url', $lead_signup_image_url );
+
 		wp_enqueue_script( 'impress-lead-signup-block' );
 
 	}
@@ -175,9 +179,12 @@ class Register_Blocks {
 			]
 		);
 
-		if ( is_admin() ) {
-			wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.css', dirname( __FILE__ ) ) );
-		}
+		// if ( is_admin() ) {
+		// 	wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.css', dirname( __FILE__ ) ) );
+		// }
+		$lead_login_image_url = plugins_url( '/impress-lead-login/lead-login-placeholder.png', __FILE__ );
+		wp_localize_script( 'impress-lead-login-block', 'lead_login_image_url', $lead_login_image_url );
+		wp_enqueue_script( 'impress-lead-login-block' );
 	}
 
 	/**
@@ -227,9 +234,9 @@ class Register_Blocks {
 			]
 		);
 
-		if ( is_admin() ) {
-			wp_enqueue_style( 'idx-omnibar', plugins_url( '../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) );
-		}
+		$impress_omnibar_image_url = plugins_url( '/impress-omnibar/omnibar-placeholder.png', __FILE__ );
+		wp_localize_script( 'impress-omnibar-block', 'impress_omnibar_image_url', $impress_omnibar_image_url );
+		wp_enqueue_script( 'impress-omnibar-block' );
 
 	}
 
@@ -270,7 +277,7 @@ class Register_Blocks {
 		);
 		wp_enqueue_style( 'editor-styles', plugins_url( '/idx-wrapper-tags/editor-style.css', __FILE__ ), false, '1.0', 'all' );
 
-		$idx_wrapper_tags_image_url = plugins_url( '/idx-wrapper-tags/small-idx-logo.png', __FILE__ );
+		$idx_wrapper_tags_image_url = plugins_url( '/idx-wrapper-tags/wrapper-tag-placeholder.png', __FILE__ );
 		wp_localize_script( 'idx-wrapper-tags-block', 'idx_wrapper_tags_image_url', $idx_wrapper_tags_image_url );
 		wp_enqueue_script( 'idx-wrapper-tags-block' );
 	}
@@ -331,13 +338,15 @@ class Register_Blocks {
 		);
 
 		$available_agents = $this->get_agents_select_list();
-		wp_localize_script( 'impress-lead-signup-block', 'impress_carousel_agent_list', $available_agents );
-		wp_enqueue_script( 'impress-lead-signup-block' );
+		wp_localize_script( 'impress-carousel-block', 'impress_carousel_agent_list', $available_agents );
 
 		$saved_links_list = $this->get_saved_links_list();
 		wp_localize_script( 'impress-carousel-block', 'impress_carousel_saved_links', $saved_links_list );
-		wp_enqueue_script( 'impress-carousel-block' );
 
+		$impress_carousel_image_url = plugins_url( '/impress-carousel/carousel-placeholder.png', __FILE__ );
+		wp_localize_script( 'impress-carousel-block', 'impress_carousel_image_url', $impress_carousel_image_url );
+
+		wp_enqueue_script( 'impress-carousel-block' );
 	}
 
 	/**
@@ -409,16 +418,19 @@ class Register_Blocks {
 		);
 
 		$available_agents = $this->get_agents_select_list();
-		wp_localize_script( 'impress-lead-signup-block', 'impress_showcase_agent_list', $available_agents );
-		wp_enqueue_script( 'impress-lead-signup-block' );
+		wp_localize_script( 'impress-showcase-block', 'impress_showcase_agent_list', $available_agents );
 
 		$saved_links_list = $this->get_saved_links_list();
 		wp_localize_script( 'impress-showcase-block', 'impress_showcase_saved_links', $saved_links_list );
+
+		$impress_showcase_image_url = plugins_url( '/impress-showcase/showcase-placeholder.png', __FILE__ );
+		wp_localize_script( 'impress-showcase-block', 'impress_showcase_image_url', $impress_showcase_image_url );
+		
 		wp_enqueue_script( 'impress-showcase-block' );
 
-		if ( is_admin() ) {
-			wp_enqueue_style( 'impress-showcase', plugins_url( '../assets/css/widgets/impress-showcase.css', dirname( __FILE__ ) ) );
-		}
+		// if ( is_admin() ) {
+		// 	wp_enqueue_style( 'impress-showcase', plugins_url( '../assets/css/widgets/impress-showcase.css', dirname( __FILE__ ) ) );
+		// }
 	}
 
 	/**

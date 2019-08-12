@@ -41,10 +41,14 @@
 
 		edit: function( props ) {
 			return [
-				el( ServerSideRender, {
-					block: 'idx-broker-platinum/impress-lead-signup-block',
-					attributes: props.attributes,
-				} ),
+				// el( ServerSideRender, {
+				// 	block: 'idx-broker-platinum/impress-lead-signup-block',
+				// 	attributes: props.attributes,
+				// } ),
+
+				el( "div", null, el("img", {
+					src: lead_signup_image_url
+				})),
 
 				el( InspectorControls, {},
 					el( Checkbox, {

@@ -28,11 +28,14 @@
 
 		edit: function( props ) {
 			return [
-				el( ServerSideRender, {
-					block: 'idx-broker-platinum/impress-omnibar-block',
-					attributes: props.attributes,
-				} ),
-
+				// el( ServerSideRender, {
+				// 	block: 'idx-broker-platinum/impress-omnibar-block',
+				// 	attributes: props.attributes,
+				// } ),
+				el( "div", null, el("img", {
+					src: impress_omnibar_image_url
+				})),
+				
 				el( InspectorControls, {},
 					el( Checkbox, {
 						label: 'Default Styles?',
