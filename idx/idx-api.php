@@ -716,6 +716,7 @@ class Idx_Api {
 		if ( 'object' !== gettype( $account_type ) && ( 'IDX Broker Platinum' === $account_type[0] || 'IDX Broker Platinum Legacy' === $account_type[0] || 'IDX Broker HOME' === $account_type[0] || 'IDX Broker HOME Legacy' === $account_type[0] ) ) {
 			return true;
 		}
+
 		return false;
 	}
 

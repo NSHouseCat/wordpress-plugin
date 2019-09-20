@@ -46,6 +46,14 @@ class Register_Blocks {
 	 */
 	public $impress_shortcodes;
 
+		/**
+	 * Idx_shortcode
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $idx_shortcodes;
+
 	/**
 	 * __construct function.
 	 *
@@ -53,31 +61,126 @@ class Register_Blocks {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->idx_api = new \IDX\Idx_Api();
+		$this->idx_api            = new \IDX\Idx_Api();
 		$this->impress_shortcodes = new \IDX\Shortcodes\Register_Impress_Shortcodes();
+		$this->idx_shortcodes     = new \IDX\Shortcodes\Register_Idx_Shortcodes();
+		$this->omnibar_shortcode  = new \IDX\Widgets\Omnibar\IDX_Omnibar_Widget();
+
+		// // Set category icon.
+		add_filter( 'block_categories', [ $this, 'register_idx_category' ], 10, 2 );
+
+		add_action( 'enqueue_block_editor_assets', [ $this, 'register_block_shared_css' ] );
 
 		// IMPress Lead Signup Block.
 		if ( $this->idx_api->platinum_account_type() ) {
 			$this->lead_signup_shortcode = new \IDX\Shortcodes\Impress_Lead_Signup_Shortcode();
-			add_action( 'init', [ $this, 'impress_lead_signup_block_init' ] );
+			add_action( 'enqueue_block_assets', [ $this, 'impress_lead_signup_block_init' ] );
 		}
 
 		// IMPress Lead Login Block.
-		add_action( 'init', [ $this, 'impress_lead_login_block_init' ] );
+		add_action( 'enqueue_block_assets', [ $this, 'impress_lead_login_block_init' ] );
 
 		// IMPress Omnibar Block.
-		$this->omnibar_shortcode = new \IDX\Widgets\Omnibar\IDX_Omnibar_Widget();
-		add_action( 'init', [ $this, 'impress_omnibar_block_init' ] );
-
-		// IDX Wrapper Tags.
-		add_action( 'init', [ $this, 'idx_wrapper_tags_block_init' ] );
+		add_action( 'enqueue_block_assets', [ $this, 'impress_omnibar_block_init' ] );
 
 		// IMPress Carousel.
-		add_action( 'init', [ $this, 'impress_carousel_block_init' ] );
+		add_action( 'enqueue_block_assets', [ $this, 'impress_carousel_block_init' ] );
 
 		// IMPress Showcase.
-		add_action( 'init', [ $this, 'impress_showcase_block_init' ] );
+		add_action( 'enqueue_block_assets', [ $this, 'impress_showcase_block_init' ] );
+
+		// IMPress City Links
+		add_action( 'enqueue_block_assets', [ $this, 'impress_city_links_block_init' ] );
+
+		// IDX Wrapper Tags.
+		add_action( 'enqueue_block_assets', [ $this, 'idx_wrapper_tags_block_init' ] );
+
+		// IDX Wrapper Tags.
+		add_action( 'enqueue_block_assets', [ $this, 'idx_widgets_block_init' ] );
 	}
+
+	/**
+	 * Register_Idx_Category function.
+	 *
+	 * @access public
+	 * @return mixed
+	 */
+	public function register_idx_category( $categories, $post ) {
+		if ( $post->post_type !== 'post' ) {
+				return $categories;
+		}
+
+		return array_merge(
+			$categories,
+			array(
+				array(
+					'slug'  => 'idx-category',
+					'title' => __( 'IMPress for IDX Broker', 'idx-broker-platinum' ),
+				),
+			)
+		);
+	}
+
+		/**
+	 * Register_Idx_Category function.
+	 *
+	 * @access public
+	 * @return mixed
+	 */
+	public function register_block_shared_css() {
+		wp_enqueue_style( 'idx-shared-block-editor-css', plugins_url( 'idx-block-edit.css', __FILE__ ), false, '1.0', 'all' );
+	}
+
+	/**
+	 * Impress_lead_signup_block_init function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function idx_widgets_block_init() {
+		// Register block script.
+		wp_register_script(
+			'idx-widgets-block',
+			plugins_url( '/idx-widgets/script.js', __FILE__ ),
+			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			'1.0',
+			false
+		);
+		// Register block and attributes.
+		register_block_type(
+			'idx-broker-platinum/idx-widgets-block',
+			[
+				'attributes' => [
+					'id' => [
+						'type' => 'string',
+					],
+				],
+				'editor_script'   => 'idx-widgets-block',
+				'render_callback' => [ $this, 'idx_widgets_block_render' ],
+			]
+		);
+
+		$placeholder_image_url = plugins_url( '/idx-widgets/idx-widget-placeholder.png', __FILE__ );
+		wp_localize_script( 'idx-widgets-block', 'idx_widget_block_image_url', $placeholder_image_url );
+
+		$available_widgets = $this->get_widget_list_options();
+		wp_localize_script( 'idx-widgets-block', 'idx_widgets_list', $available_widgets );
+
+		wp_enqueue_script( 'idx-widgets-block' );
+
+	}
+
+	/**
+	 * Idx_widgets_block_render function.
+	 *
+	 * @access public
+	 * @param mixed $attributes - Widget attributes.
+	 * @return string
+	 */
+	public function idx_widgets_block_render( $attributes ) {
+		return $this->idx_shortcodes->show_widget( $attributes );
+	}
+
 
 	/**
 	 * Impress_lead_signup_block_init function.
@@ -179,9 +282,6 @@ class Register_Blocks {
 			]
 		);
 
-		// if ( is_admin() ) {
-		// 	wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.css', dirname( __FILE__ ) ) );
-		// }
 		$lead_login_image_url = plugins_url( '/impress-lead-login/lead-login-placeholder.png', __FILE__ );
 		wp_localize_script( 'impress-lead-login-block', 'lead_login_image_url', $lead_login_image_url );
 		wp_enqueue_script( 'impress-lead-login-block' );
@@ -248,6 +348,7 @@ class Register_Blocks {
 	 * @return string
 	 */
 	public function impress_omnibar_block_render( $attributes ) {
+		error_log( print_r( 'Omnibar render block called', true ) );
 		return $this->omnibar_shortcode->create_omnibar->add_omnibar_shortcode( $attributes );
 	}
 
@@ -275,14 +376,12 @@ class Register_Blocks {
 				'editor_script' => 'idx-wrapper-tags-block',
 			]
 		);
-		wp_enqueue_style( 'editor-styles', plugins_url( '/idx-wrapper-tags/editor-style.css', __FILE__ ), false, '1.0', 'all' );
 
 		$idx_wrapper_tags_image_url = plugins_url( '/idx-wrapper-tags/wrapper-tag-placeholder.png', __FILE__ );
 		wp_localize_script( 'idx-wrapper-tags-block', 'idx_wrapper_tags_image_url', $idx_wrapper_tags_image_url );
 		wp_enqueue_script( 'idx-wrapper-tags-block' );
+
 	}
-
-
 
 	/**
 	 * Impress_carousel_block_init function.
@@ -425,12 +524,8 @@ class Register_Blocks {
 
 		$impress_showcase_image_url = plugins_url( '/impress-showcase/showcase-placeholder.png', __FILE__ );
 		wp_localize_script( 'impress-showcase-block', 'impress_showcase_image_url', $impress_showcase_image_url );
-		
-		wp_enqueue_script( 'impress-showcase-block' );
 
-		// if ( is_admin() ) {
-		// 	wp_enqueue_style( 'impress-showcase', plugins_url( '../assets/css/widgets/impress-showcase.css', dirname( __FILE__ ) ) );
-		// }
+		wp_enqueue_script( 'impress-showcase-block' );
 	}
 
 	/**
@@ -442,6 +537,75 @@ class Register_Blocks {
 	 */
 	public function impress_showcase_block_render( $attributes ) {
 		return $this->impress_shortcodes->property_showcase_shortcode( $attributes );
+	}
+
+
+	/**
+	 * Impress_city_links_block_init function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function impress_city_links_block_init() {
+		// Register block script.
+		wp_register_script(
+			'impress-city-links-block',
+			plugins_url( '/impress-city-links/script.js', __FILE__ ),
+			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			'1.0',
+			false
+		);
+		// Register block and attributes.
+		register_block_type(
+			'idx-broker-platinum/impress-city-links-block',
+			[
+				'attributes' => [
+					'mls' => [
+						'type' => 'string',
+					],
+					'city_list' => [
+						'type' => 'string',
+					],
+					'use_columns' => [
+						'type' => 'int',
+					],
+					'number_columns' => [
+						'type' => 'int',
+					],
+					'styles' => [
+						'type' => 'int',
+					],
+					'show_count' => [
+						'type' => 'int',
+					],
+					'new_window' => [
+						'type' => 'int',
+					],
+				],
+				'editor_script'   => 'impress-city-links-block',
+				'render_callback' => [ $this, 'impress_city_links_block_render' ],
+			]
+		);
+
+		$mls_options = $this->get_mls_options();
+		wp_localize_script( 'impress-city-links-block', 'impress_city_links_mls_options', $mls_options );
+
+		$city_list_options = $this->get_city_list_options();
+		wp_localize_script( 'impress-city-links-block', 'impress_city_links_city_options', $city_list_options );
+
+		wp_enqueue_script( 'impress-city-links-block' );
+
+	}
+
+	/**
+	 * Impress_city_link_block_render function.
+	 *
+	 * @access public
+	 * @param mixed $attributes - Widget attributes.
+	 * @return string
+	 */
+	public function impress_city_links_block_render( $attributes ) {
+		return $this->impress_shortcodes->city_links_shortcode( $attributes );
 	}
 
 	/**
@@ -491,7 +655,7 @@ class Register_Blocks {
 
 		if ( get_option( 'idx_broker_apikey' ) ) {
 			$agent_api_data = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-			if ( ! is_wp_error( $agent_api_data ) ) {
+			if ( $agent_api_data['agent'] ) {
 				foreach ( $agent_api_data['agent'] as $current_agent ) {
 					array_push( $agents_list, array( 'label' => $current_agent['agentDisplayName'], 'value' => $current_agent['agentID'] ) );
 				}
@@ -509,4 +673,64 @@ class Register_Blocks {
 
 		return $agents_list;
 	}
+
+	/**
+	 * Get_city_list_options function.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function get_city_list_options( ) {
+		$lists  = $this->idx_api->city_list_names();
+		$impress_city_lists = [];
+
+		if ( ! is_array( $lists ) ) {
+			return;
+		}
+
+		foreach ( $lists as $list ) {
+			// display the list id if no list name has been assigned.
+			$list_text = empty( $list->name ) ? $list->id : $list->name;
+			array_push( $impress_city_lists, array( 'label' => $list_text, 'value' => $list->id ) );
+		}
+		return $impress_city_lists;
+	}
+
+	/**
+	 * Get_mls_options function.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function get_mls_options() {
+		$approved_mls = $this->idx_api->approved_mls();
+		$mls_list = [];
+
+		if ( ! is_array( $approved_mls ) ) {
+			return;
+		}
+		foreach ( $approved_mls as $mls ) {
+			array_push( $mls_list, [ 'label' => $mls->name, 'value' => $mls->id ] );
+		}
+		return $mls_list;
+	}
+
+	/**
+	 * Get_widget_list_options function.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function get_widget_list_options() {
+		$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
+		$widget_list = [];
+
+		if ( $idx_widgets ) {
+			foreach ( $idx_widgets as $widget ) {
+				array_push( $widget_list, [ 'label' => $widget->name, 'value' => $widget->uid ] );
+			}
+		}
+		return $widget_list;
+	}
+
 }

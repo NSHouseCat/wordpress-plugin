@@ -131,4 +131,5 @@ class Idx_Broker_Plugin {
 		// Disable scheduled IDX Page Update as well.
 		\IDX\Idx_Pages::unschedule_idx_page_update();
 	}
+
 }

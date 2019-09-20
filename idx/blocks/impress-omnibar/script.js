@@ -6,10 +6,18 @@
 	var Checkbox = wp.components.CheckboxControl
 	var icon = el('i', {class: "fa fa-search fa-2x"}, null )  
 
+	function setCategory() {
+		if (window.location.href.includes('wp-admin')) {
+			return 'idx-category'
+		} else {
+			return 'widgets'
+		}
+	}
+
 	blocks.registerBlockType( 'idx-broker-platinum/impress-omnibar-block', {
 		title: 'IMPress Omnibar Search',
 		icon: icon,
-		category: 'widgets',
+		category: setCategory(),
 
 		attributes: {
 			styles: {
@@ -32,7 +40,9 @@
 				// 	block: 'idx-broker-platinum/impress-omnibar-block',
 				// 	attributes: props.attributes,
 				// } ),
-				el( "div", null, el("img", {
+				el( "div", { 
+					class: 'idx-block-placeholder-container',
+				 }, el("img", {
 					src: impress_omnibar_image_url
 				})),
 				

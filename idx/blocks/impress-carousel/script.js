@@ -1,17 +1,23 @@
 ( function( blocks, element ) {
 	var el = wp.element.createElement
 	var registerBlockType = wp.blocks.registerBlockType
-	var ServerSideRender = wp.components.ServerSideRender
 	var InspectorControls = wp.editor.InspectorControls
 	var TextControl = wp.components.TextControl
 	var Checkbox = wp.components.CheckboxControl
 	var SelectControl = wp.components.SelectControl
-	//var icon = el('i', {class: "fa fa-user-plus fa-2x"}, null )  
+ 
+	function setCategory() {
+		if (window.location.href.includes('wp-admin')) {
+			return 'idx-category'
+		} else {
+			return 'widgets'
+		}
+	}
 
 	blocks.registerBlockType( 'idx-broker-platinum/impress-carousel-block', {
 		title: 'IMPress Carousel',
 		icon: 'admin-multisite',
-		category: 'widgets',
+		category: setCategory(),
 
 		attributes: {
 			max: {
@@ -58,14 +64,9 @@
 			const sortOptions = [{label: 'Default', value: 'default'}, {label: 'Highest to Lowest Price', value: 'high-low'}, {label: 'Lowest to Highest Price', value: 'low-high'}];
 		
 			return [
-				// el( ServerSideRender, {
-				// 	block: 'idx-broker-platinum/impress-carousel-block',
-				// 	attributes: props.attributes,
-				// } ),
-
-				el( "div", {
-					className: "impress-carousel-block-preview"
-				}, el("img", {
+				el( "div", { 
+					class: 'idx-block-placeholder-container',
+				 }, el("img", {
 					src: impress_carousel_image_url
 				}), el("div", null, "")),
 

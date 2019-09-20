@@ -8,10 +8,18 @@
 	var SelectControl = wp.components.SelectControl
 	var icon = el('i', {class: "fa fa-user-plus fa-2x"}, null )  
 
+	function setCategory() {
+		if (window.location.href.includes('wp-admin')) {
+			return 'idx-category'
+		} else {
+			return 'widgets'
+		}
+	}
+
 	blocks.registerBlockType( 'idx-broker-platinum/impress-lead-signup-block', {
 		title: 'IMPress Lead Signup',
 		icon: icon,
-		category: 'widgets',
+		category: setCategory(),
 
 		attributes: {
 			phone: {
@@ -41,12 +49,9 @@
 
 		edit: function( props ) {
 			return [
-				// el( ServerSideRender, {
-				// 	block: 'idx-broker-platinum/impress-lead-signup-block',
-				// 	attributes: props.attributes,
-				// } ),
-
-				el( "div", null, el("img", {
+				el( "div", { 
+					class: 'idx-block-placeholder-container',
+				 }, el("img", {
 					src: lead_signup_image_url
 				})),
 
