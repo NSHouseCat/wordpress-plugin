@@ -100,7 +100,7 @@ class Lead_Management {
 		$screen_id = get_current_screen();
 		if ( $screen_id->id === 'leads_page_edit-lead' || $screen_id->id === 'toplevel_page_leads' ) {
 
-			wp_enqueue_script( 'idx_lead_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-leads.js', array( 'jquery' ), true );
+			wp_enqueue_script( 'idx_lead_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-leads.js', [ 'jquery' ], true );
 			wp_localize_script(
 				'idx_lead_ajax_script',
 				'IDXLeadAjax',
@@ -111,10 +111,10 @@ class Lead_Management {
 				)
 			);
 			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
-			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array( 'jquery' ), true );
-			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array( 'jquery' ), true );
+			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', [ 'jquery' ], true );
+			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', [ 'jquery' ], true );
 			wp_localize_script( 'jquery-datatables', 'datatablesajax', [ 'url' => admin_url( 'admin-ajax.php' ) ] );
-			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
+			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', [ 'jquery' ], '4.0.5', true );
 
 			wp_enqueue_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.min.css' );
 			wp_enqueue_style( 'idx-material-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' );

@@ -39,8 +39,8 @@ class Idx_Broker_Plugin {
 
 			new IDX\Initiate_Plugin();
 			/** Function that is executed when plugin is activated. */
-			register_activation_hook( __FILE__, array( $this, 'idx_activate' ) );
-			register_deactivation_hook( __FILE__, array( $this, 'idx_deactivate' ) );
+			register_activation_hook( __FILE__, [ $this, 'idx_activate' ] );
+			register_deactivation_hook( __FILE__, [ $this, 'idx_deactivate' ] );
 		}
 
 		// IMPress Listings.
@@ -58,8 +58,8 @@ class Idx_Broker_Plugin {
 	 */
 	public function php_version_check() {
 		if ( PHP_VERSION < 7.0 ) {
-			add_action( 'admin_init', array( $this, 'idx_deactivate_plugin' ) );
-			add_action( 'admin_notices', array( $this, 'incompatible_message' ) );
+			add_action( 'admin_init', [ $this, 'idx_deactivate_plugin' ] );
+			add_action( 'admin_notices', [ $this, 'incompatible_message' ] );
 			return false;
 		} else {
 			return true;
@@ -131,7 +131,7 @@ class Idx_Broker_Plugin {
 			$_wp_listings_taxonomies->register_taxonomies();
 		}
 
-		$notice_keys = array('wpl_notice_idx', 'wpl_listing_notice_idx');
+		$notice_keys = [ 'wpl_notice_idx', 'wpl_listing_notice_idx' ];
 		foreach ($notice_keys as $notice) {
 			delete_user_meta( get_current_user_id(), $notice );
 		}
@@ -165,7 +165,7 @@ class Idx_Broker_Plugin {
 		// IMPress Listings.
 		flush_rewrite_rules();
 
-		$notice_keys = array('wpl_notice_idx', 'wpl_listing_notice_idx');
+		$notice_keys = [ 'wpl_notice_idx', 'wpl_listing_notice_idx' ];
 		foreach ($notice_keys as $notice) {
 			delete_user_meta( get_current_user_id(), $notice );
 		}

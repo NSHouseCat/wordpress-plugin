@@ -70,7 +70,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		if ( $instance['styles'] ) {
 			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.min.css', dirname( __FILE__ ) ) );
-			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', [], '5.8.2' );
 		}
 
 		$output = '';
@@ -187,7 +187,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			}
 
 			if ( has_filter( 'impress_carousel_property_url_suffix' ) ) {
-				$url = $url . apply_filters( 'impress_carousel_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
+				$url = $url . apply_filters( 'impress_carousel_property_url_suffix', $suffix = http_build_query( [] ), $prop, $this->idx_api );
 			}
 
 			$output .= apply_filters(
@@ -411,7 +411,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance                  = array();
+		$instance                  = [];
 		$instance['title']         = strip_tags( $new_instance['title'] );
 		$instance['properties']    = strip_tags( $new_instance['properties'] );
 		$instance['saved_link_id'] = (int) $new_instance['saved_link_id'];
@@ -514,7 +514,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	 * @return str           HTML options tags of agents ids and names
 	 */
 	public function get_agents_select_list( $agent_id ) {
-		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
 
 		if ( ! is_array( $agents_array ) ) {
 			return;

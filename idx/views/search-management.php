@@ -76,7 +76,7 @@ class Search_Management {
 		$screen_id = get_current_screen();
 		if ( $screen_id->id === 'impress_page_idx-searches' || $screen_id->id === 'impress_page_edit-idx-search' || $screen_id->id === 'searches_page_edit-idx-search' || $screen_id->id === 'toplevel_page_idx-searches' ) {
 
-			wp_enqueue_script( 'idx_search_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-searches.js', array( 'jquery' ), true );
+			wp_enqueue_script( 'idx_search_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-searches.js', [ 'jquery' ], true );
 			wp_localize_script(
 				'idx_search_ajax_script',
 				'IDXSearchAjax',
@@ -87,17 +87,17 @@ class Search_Management {
 					'detailsurl'  => $this->idx_api->details_url(),
 				)
 			);
-			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
-			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array( 'jquery' ), true );
-			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array( 'jquery' ), true );
-			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
+			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', [], true );
+			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', [ 'jquery' ], true );
+			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', [ 'jquery' ], true );
+			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', [ 'jquery' ], '4.0.5', true );
 
 			wp_enqueue_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.min.css' );
 			wp_enqueue_style( 'idx-material-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' );
 			wp_enqueue_style( 'idx-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons' );
 			wp_enqueue_style( 'idx-material-style', IMPRESS_IDX_URL . 'assets/css/material.min.css' );
 			wp_enqueue_style( 'idx-material-datatable', 'https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css' );
-			wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
+			wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', [], '4.0.5', 'all'  );
 		}
 	}
 
@@ -519,7 +519,7 @@ class Search_Management {
 		} elseif ( ! empty( $_GET['leadID'] ) && is_numeric( $_GET['leadID'] ) ) {
 			$lead_id = $_GET['leadID'];
 			// Get Lead info
-			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', [], 60 * 2, 'GET', true );
 			?>
 			<h3>Add Lead Saved Search for <?php echo ( $lead['firstName'] ) ? $lead['firstName'] : ''; ?> <?php echo ( $lead['lastName'] ) ? $lead['lastName'] : ''; ?></h3>
 			<form action="" method="post" id="add-lead-search" class="add-lead-search">
@@ -635,7 +635,7 @@ class Search_Management {
 	 * Output Agents as select options
 	 */
 	private function agents_select_list( $agent_id = null ) {
-		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
 
 		if ( null !== $agent_id && ! is_wp_error( $agents_array ) ) {
 			$agents_list = '<option value="0" ' . selected( $agent_id, '0', 0 ) . '>None</option>';

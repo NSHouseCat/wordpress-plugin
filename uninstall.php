@@ -29,10 +29,10 @@ function idx_delete_plugin_data() {
 
 	// Delete all IDX page posts.
 	$idx_pages = get_posts(
-		array(
+		[
 			'post_type'   => 'idx_page',
 			'numberposts' => -1,
-		)
+		]
 	);
 	foreach ( $idx_pages as $post ) {
 		wp_delete_post( $post->ID, true );
@@ -40,10 +40,10 @@ function idx_delete_plugin_data() {
 
 	// Delete all wrapper posts.
 	$idx_wrappers = get_posts(
-		array(
+		[
 			'post_type'   => 'idx-wrapper',
 			'numberposts' => -1,
-		)
+		]
 	);
 	foreach ( $idx_wrappers as $post ) {
 		wp_delete_post( $post->ID, true );

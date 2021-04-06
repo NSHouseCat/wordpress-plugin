@@ -53,7 +53,7 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function add_dashboard_widget() {
-		add_meta_box( 'idx_dashboard_widget', 'IMPress for IDX Broker', array( $this, 'compile_dashboard_widget' ), 'dashboard', 'normal', 'high' );
+		add_meta_box( 'idx_dashboard_widget', 'IMPress for IDX Broker', [ $this, 'compile_dashboard_widget' ], 'dashboard', 'normal', 'high' );
 	}
 
 	/**
@@ -212,7 +212,7 @@ class Dashboard_Widget {
 		wp_enqueue_style( 'idx-dashboard-widget', plugins_url( '/assets/css/idx-dashboard-widget.min.css', dirname( __FILE__ ) ) );
 		wp_enqueue_script( 'google-charts', 'https://www.gstatic.com/charts/loader.js' );
 		wp_enqueue_script( 'idx-dashboard-widget', plugins_url( '/assets/js/idx-dashboard-widget.min.js', dirname( __FILE__ ) ) );
-		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', [], '5.8.2' );
 	}
 
 	/**
@@ -249,7 +249,7 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function listings_json( $interval ) {
-		$data = array();
+		$data = [];
 		if ( $interval === 'day' ) {
 			// return one week of data
 			$timeframe = 24 * 7;
@@ -328,13 +328,13 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function leads_month_interval( $interval_data, $min_max ) {
-		$data          = array();
-		$unique_months = array();
+		$data          = [];
+		$unique_months = [];
 		// headers for chart
-		$data[] = array(
+		$data[] = [
 			'Month',
 			'Registrations',
-		);
+		];
 		$min    = $min_max['min'];
 		$max    = $min_max['max'];
 
@@ -350,18 +350,18 @@ class Dashboard_Widget {
 				$timestamp      = $month['timestamp'];
 				if ( date( 'M Y', $data_timestamp ) === $date ) {
 					$unique_months[ $date ] = $date;
-					$data[]                 = array(
+					$data[]                 = [
 						$date,
 						$data_month['value'],
-					);
+					];
 				}
 			}
 			// if no lead was captured for the month, set month to 0
 			if ( ! isset( $unique_months[ $date ] ) ) {
-				$data[] = array(
+				$data[] = [
 					$date,
 					0,
-				);
+				];
 			}
 		}
 		return $data;
@@ -376,17 +376,17 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function leads_day_interval( $interval_data, $min_max ) {
-		$data   = array();
-		$data[] = array(
+		$data   = [];
+		$data[] = [
 			'Day',
 			'Registrations',
-		);
+		];
 		$min    = $min_max['min'];
 		$max    = $min_max['max'];
 
 		// create week from last 7 days to iterate over
 		$week        = $this->create_week( $min, $max );
-		$unique_days = array();
+		$unique_days = [];
 		// if lead capture day matches day of week, add to array
 		foreach ( $interval_data as $data_day ) {
 			foreach ( $week as $day ) {
@@ -396,25 +396,25 @@ class Dashboard_Widget {
 
 				if ( date( 'm-d', $data_timestamp ) === $date ) {
 					if ( isset( $unique_days[ $date ] ) ) {
-						$unique_days[ $date ] = array(
+						$unique_days[ $date ] = [
 							$date,
 							$unique_days[ $date ][1] + 1,
-						);
+						];
 					} else {
-						$unique_days[ $date ] = array(
+						$unique_days[ $date ] = [
 							$date,
 							$data_day['value'],
-						);
+						];
 					}
 				} else {
 					if ( isset( $unique_days[ $date ] ) ) {
 						// if already set, continue to next item in array
 						continue;
 					} else {
-						$unique_days[ $date ] = array(
+						$unique_days[ $date ] = [
 							$date,
 							0,
-						);
+						];
 					}
 				}
 			}
@@ -435,18 +435,18 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function create_year( $min, $max ) {
-		$year_array      = array();
+		$year_array      = [];
 		$month_timestamp = $min;
 		for ( $i = 0; $i < 6; $i++ ) {
 			$date                  = date( 'M Y', $month_timestamp );
 			$carbon_object         = Carbon::createFromTimestamp( $month_timestamp );
 			$carbon_object->month += 1;
 			$next_month            = $carbon_object->timestamp;
-			$year_array[]          = array(
+			$year_array[]          = [
 				'date'      => $date,
 				'value'     => 0,
 				'timestamp' => $month_timestamp,
-			);
+			];
 			// move to next day
 			$month_timestamp = $next_month;
 		}
@@ -463,15 +463,15 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function create_week( $min, $max ) {
-		$week_array = array();
+		$week_array = [];
 		$day        = $min;
 		for ( $i = 0; $i < 7; $i++ ) {
 			$date         = date( 'm-d', $day );
-			$week_array[] = array(
+			$week_array[] = [
 				'date'      => $date,
 				'value'     => 0,
 				'timestamp' => $day,
-			);
+			];
 			// move to next day
 			$day = $day + 60 * 60 * 24;
 		}
@@ -487,7 +487,7 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function get_interval_data( $timeframe, $interval ) {
-		$leads_array = array();
+		$leads_array = [];
 		$min_max     = $this->min_max_intervals( $interval );
 
 		$api_data = $this->idx_api->get_leads();
@@ -504,9 +504,9 @@ class Dashboard_Widget {
 				continue;
 			}
 			// add entry with timestamp to leads_array
-			$leads_array[] = array(
+			$leads_array[] = [
 				'timestamp' => $subscribe_date,
-			);
+			];
 		}
 
 		$interval_data = $this->interval_data( $leads_array, $interval );
@@ -541,14 +541,14 @@ class Dashboard_Widget {
 
 	// feed in week or month. Example: $data, 'month'
 	public function interval_data( $data, $interval ) {
-		$interval_data = array();
+		$interval_data = [];
 		foreach ( $data as $datum ) {
 			$interval_number = Carbon::createFromTimestamp( $datum['timestamp'] )->$interval;
 			if ( ! isset( $interval_data[ $interval_number ] ) ) {
-				$interval_data[ $interval_number ] = array(
+				$interval_data[ $interval_number ] = [
 					'timestamp' => $datum['timestamp'],
 					'value'     => 0,
-				);
+				];
 			}
 			$interval_data[ $interval_number ]['value'] += 1;
 		}
@@ -593,18 +593,18 @@ class Dashboard_Widget {
 		}
 
 		// chart headers
-		$json_data = array(
+		$json_data = [
 			array( 'Listing Status', 'Count' ),
-		);
+		];
 
-		$listings_record = array();
+		$listings_record = [];
 
 		foreach ( $listings as $listing ) {
 			$listing_status = $listing[ "$status_type" ];
 
 			// if status entry is not yet set, add it
 			if ( ! isset( $listings_record[ $listing_status ] ) ) {
-				$listings_record[ $listing_status ] = array( $listing_status, 1 );
+				$listings_record[ $listing_status ] = [ $listing_status, 1 ];
 			} else {
 				// increase count of status
 				$listings_record[ $listing_status ][1] += 1;

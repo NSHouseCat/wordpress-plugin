@@ -61,7 +61,7 @@ function wp_listings_init() {
 		wp_register_style('wp-listings-single', IMPRESS_IDX_URL . 'assets/css/wp-listings-single.min.css', '', null, 'all');
 
 		/** Register Font Awesome icons but don't enqueue them */
-		wp_register_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2', 'all' );
+		wp_register_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', [], '5.8.2', 'all' );
 
 
 		/** Register Properticons but don't enqueue them */
@@ -141,7 +141,7 @@ function wp_listings_init() {
 
 		/** Enqueue Font Awesome in the Admin if IDX Broker is not installed */
 		if (!class_exists( 'Idx_Broker_Plugin' )) {
-			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', [], '5.8.2' );
 			wp_enqueue_style( 'upgrade-icon', IMPRESS_IDX_URL . 'assets/css/wp-listings-upgrade.min.css' );
 		}
 

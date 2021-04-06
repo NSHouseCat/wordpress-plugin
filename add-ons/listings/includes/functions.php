@@ -209,7 +209,7 @@ add_action( 'pre_get_posts', 'wp_listings_post_number' );
  * Add Listings to "At a glance" Dashboard widget
  */
 add_filter( 'dashboard_glance_items', 'impress_listings_glance_items', 10, 1 );
-function impress_listings_glance_items( $items = array() ) {
+function impress_listings_glance_items( $items = [] ) {
 
     $post_types = array( 'listing' );
 

@@ -103,7 +103,7 @@ class Idx_Api {
 		$method,
 		$apiversion = Initiate_Plugin::IDX_API_DEFAULT_VERSION,
 		$level = 'clients',
-		$params = array(),
+		$params = [],
 		$expiration = 7200,
 		$request_type = 'GET',
 		$json_decode_type = false
@@ -277,7 +277,7 @@ class Idx_Api {
 	 */
 	public function idx_api_get_systemlinks() {
 		if ( empty( $this->api_key ) ) {
-			return array();
+			return [];
 		}
 		return $this->idx_api( 'systemlinks' );
 	}
@@ -289,7 +289,7 @@ class Idx_Api {
 	 */
 	public function idx_api_get_savedlinks() {
 		if ( empty( $this->api_key ) ) {
-			return array();
+			return [];
 		}
 		return $this->idx_api( 'savedlinks' );
 	}
@@ -301,7 +301,7 @@ class Idx_Api {
 	 */
 	public function idx_api_get_widgetsrc() {
 		if ( empty( $this->api_key ) ) {
-			return array();
+			return [];
 		}
 		return $this->idx_api( 'widgetsrc' );
 	}
@@ -314,7 +314,7 @@ class Idx_Api {
 			return Initiate_Plugin::IDX_API_DEFAULT_VERSION;
 		}
 
-		$data = $this->idx_api( 'apiversion', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 86400 );
+		$data = $this->idx_api( 'apiversion', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 86400 );
 		if ( is_array( $data ) && ! empty( $data ) ) {
 			return $data['version'];
 		} else {
@@ -406,10 +406,10 @@ class Idx_Api {
 		$links = $this->idx_api_get_systemlinks();
 
 		if ( empty( $links ) || ! empty( $links->errors ) ) {
-			return array();
+			return [];
 		}
 
-		$system_link_urls = array();
+		$system_link_urls = [];
 
 		foreach ( $links as $link ) {
 			$system_link_urls[] = $link->url;
@@ -428,10 +428,10 @@ class Idx_Api {
 		$links = $this->idx_api_get_systemlinks();
 
 		if ( empty( $links ) || ! empty( $links->errors ) ) {
-			return array();
+			return [];
 		}
 
-		$system_link_names = array();
+		$system_link_names = [];
 
 		foreach ( $links as $link ) {
 			$system_link_names[] = $link->name;
@@ -451,10 +451,10 @@ class Idx_Api {
 		$links = $this->idx_api_get_savedlinks();
 
 		if ( empty( $links ) || ! empty( $links->errors ) ) {
-			return array();
+			return [];
 		}
 
-		$system_link_urls = array();
+		$system_link_urls = [];
 
 		foreach ( $links as $link ) {
 			$system_link_urls[] = $link->url;
@@ -474,10 +474,10 @@ class Idx_Api {
 		$links = $this->idx_api_get_savedlinks();
 
 		if ( empty( $links ) || ! empty( $links->errors ) ) {
-			return array();
+			return [];
 		}
 
-		$system_link_names = array();
+		$system_link_names = [];
 
 		foreach ( $links as $link ) {
 			$system_link_names[] = $link->linkTitle;
@@ -566,7 +566,7 @@ class Idx_Api {
 	 */
 	public function saved_link_properties( $saved_link_id ) {
 
-		$saved_link_properties = $this->idx_api( 'savedlinks/' . $saved_link_id . '/results?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$saved_link_properties = $this->idx_api( 'savedlinks/' . $saved_link_id . '/results?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
 
 		return $saved_link_properties;
 	}
@@ -590,7 +590,7 @@ class Idx_Api {
 		$download_complete = false;
 
 		// Make initial API request for listings.
-		$listing_data = $this->idx_api( "$type?disclaimers=true", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$listing_data = $this->idx_api( "$type?disclaimers=true", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
 
 		if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
 			$properties = $listing_data['data'];
@@ -604,7 +604,7 @@ class Idx_Api {
 				continue;
 			}
 			// Explode $listing_data['next'] on '/clients/', index 1 of the resulting array will have the fragment needed to make the next API request.
-			$listing_data = $this->idx_api( explode( '/clients/', $listing_data['next'] )[1], Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+			$listing_data = $this->idx_api( explode( '/clients/', $listing_data['next'] )[1], Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
 			// If $listing_data['data'] is an array, merge it with the existing listings/properties array.
 			if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
 				$properties = array_merge( $properties, $listing_data['data'] );
@@ -630,7 +630,7 @@ class Idx_Api {
 	 * @return array
 	 */
 	public function get_client_supplementals( $status = '' ) {
-		$listing_data = $this->idx_api( 'supplemental', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$listing_data = $this->idx_api( 'supplemental', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
 
 		// Return empty array if no listings are returned.
 		if ( empty( $listing_data ) || ! is_array( $listing_data ) ) {
@@ -703,7 +703,7 @@ class Idx_Api {
 	 */
 	public function property_count_by_id( $type = 'city', $idx_id, $id ) {
 
-		$city_count = $this->idx_api( 'propertycount/' . $idx_id . '?countType=' . $type . '&countSpecifier=' . $id, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 12 );
+		$city_count = $this->idx_api( 'propertycount/' . $idx_id . '?countType=' . $type . '&countSpecifier=' . $id, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', [], 60 * 60 * 12 );
 
 		return $city_count;
 	}
@@ -763,7 +763,7 @@ class Idx_Api {
 	 */
 	public function approved_mls() {
 
-		$approved_mls = $this->idx_api( 'approvedmls', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 24 );
+		$approved_mls = $this->idx_api( 'approvedmls', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', [], 60 * 60 * 24 );
 
 		return $approved_mls;
 	}
@@ -772,13 +772,13 @@ class Idx_Api {
 	 * Returns search field names for an MLS
 	 */
 	public function searchfields( $idxID ) {
-		$approved_mls = $this->idx_api( "searchfields/$idxID", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array() );
+		$approved_mls = $this->idx_api( "searchfields/$idxID", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', [] );
 
 		return $approved_mls;
 	}
 
 	public function searchfieldvalues( $idxID, $fieldName, $mlsPtID ) {
-		$approved_mls = $this->idx_api( "searchfieldvalues/$idxID?mlsPtID=$mlsPtID&name=$fieldName", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array() );
+		$approved_mls = $this->idx_api( "searchfieldvalues/$idxID?mlsPtID=$mlsPtID&name=$fieldName", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', [] );
 
 		return $approved_mls;
 	}
@@ -827,7 +827,7 @@ class Idx_Api {
 	 * @return bool
 	 */
 	public function platinum_account_type() {
-		$account_type = $this->idx_api( 'accounttype', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24 );
+		$account_type = $this->idx_api( 'accounttype', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 60 * 60 * 24 );
 		if ( ! empty( $account_type ) && 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'plat' ) || stripos( $account_type[0], 'home' ) ) ) {
 			return true;
 		}
@@ -974,7 +974,7 @@ class Idx_Api {
 		}
 
 		// Initial request.
-		$listing_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
+		$listing_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 60 * 2, 'GET', true );
 
 		if ( array_key_exists( 'data', $listing_data ) && ! empty( $listing_data['data'] ) ) {
 			// Assign returned listings to $properties.
@@ -983,7 +983,7 @@ class Idx_Api {
 			// Get rest of listings if there are more than 50.
 			while ( ( $offset + $limit ) < $listing_data['total'] ) {
 				$offset       = $offset + $limit;
-				$listing_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
+				$listing_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 60 * 2, 'GET', true );
 				$properties   = array_merge( $properties, $listing_data['data'] );
 			}
 		}
@@ -998,7 +998,7 @@ class Idx_Api {
 	 * @return str           HTML options tags of agents ids and names
 	 */
 	public function get_agents_select_list( $agent_id ) {
-		$agents_array = $this->idx_api( 'agents', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$agents_array = $this->idx_api( 'agents', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
 
 		if ( ! is_array( $agents_array ) || ! isset( $agents_array['agent'] ) ) {
 			return;

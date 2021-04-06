@@ -123,10 +123,10 @@ class Create_Impress_Widgets {
 	 * property_showcase_shortcode function.
 	 *
 	 * @access public
-	 * @param array $atts (default: array())
+	 * @param array $atts (default: [])
 	 * @return void
 	 */
-	public function property_showcase_shortcode( $atts = array() ) {
+	public function property_showcase_shortcode( $atts = [] ) {
 
 		extract(
 			shortcode_atts(
@@ -313,10 +313,10 @@ class Create_Impress_Widgets {
 	 * property_carousel_shortcode function.
 	 *
 	 * @access public
-	 * @param array $atts (default: array())
+	 * @param array $atts (default: [])
 	 * @return void
 	 */
-	public function property_carousel_shortcode( $atts = array() ) {
+	public function property_carousel_shortcode( $atts = [] ) {
 
 		extract(
 			shortcode_atts(
@@ -460,10 +460,10 @@ class Create_Impress_Widgets {
 	 * city_links_shortcode function.
 	 *
 	 * @access public
-	 * @param array $atts (default: array())
+	 * @param array $atts (default: [])
 	 * @return void
 	 */
-	public function city_links_shortcode( $atts = array() ) {
+	public function city_links_shortcode( $atts = [] ) {
 
 		extract(
 			shortcode_atts(

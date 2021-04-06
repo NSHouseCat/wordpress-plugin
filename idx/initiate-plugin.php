@@ -17,32 +17,32 @@ class Initiate_Plugin {
 
 		$this->set_defaults();
 
-		add_action( 'init', array( $this, 'update_triggered' ) );
-		add_action( 'wp_head', array( $this, 'display_wpversion' ) );
-		add_action( 'wp_head', array( $this, 'idx_broker_activated' ) );
-		add_filter( 'plugin_action_links_' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/idx-broker-platinum.php', array( $this, 'idx_broker_platinum_plugin_actlinks' ) );
-		// Setting the priority to 9 for admin_menu makes the Wrappers post type UI below the Settings link
-		add_action( 'admin_menu', array( $this, 'add_menu' ), 9 );
-		add_action( 'admin_menu', array( $this, 'idx_broker_platinum_options_init' ) );
-		add_action( 'admin_bar_init', array( $this, 'load_admin_menu_styles' ) );
-		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 999.125 );
-		add_action( 'admin_init', array( $this, 'disable_original_plugin' ) );
+		add_action( 'init', [ $this, 'update_triggered' ] );
+		add_action( 'wp_head', [ $this, 'display_wpversion' ] );
+		add_action( 'wp_head', [ $this, 'idx_broker_activated' ] );
+		add_filter( 'plugin_action_links_' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/idx-broker-platinum.php', [ $this, 'idx_broker_platinum_plugin_actlinks' ] );
+		// Setting the priority to 9 for admin_menu makes the Wrappers post type UI below the Settings link.
+		add_action( 'admin_menu', [ $this, 'add_menu' ], 9 );
+		add_action( 'admin_menu', [ $this, 'idx_broker_platinum_options_init' ] );
+		add_action( 'admin_bar_init', [ $this, 'load_admin_menu_styles' ] );
+		add_action( 'admin_bar_menu', [ $this, 'add_admin_bar_menu' ], 999.125 );
+		add_action( 'admin_init', [ $this, 'disable_original_plugin' ] );
 		add_action( 'admin_init', [ $this, 'get_install_info' ] );
-		add_action( 'admin_enqueue_scripts', array( $this, 'idx_inject_script_and_style' ) );
+		add_action( 'admin_enqueue_scripts', [ $this, 'idx_inject_script_and_style' ] );
 
 		add_action( 'wp_ajax_idx_update_recaptcha_setting', [ $this, 'idx_update_recaptcha_setting' ] );
 		add_action( 'wp_ajax_idx_update_data_optout_setting', [ $this, 'idx_update_data_optout_setting' ] );
 		add_action( 'wp_ajax_idx_update_dev_partner_key', [ $this, 'idx_update_dev_partner_key' ] );
 
-		add_action( 'wp_loaded', array( $this, 'schedule_omnibar_update' ) );
-		add_action( 'idx_omnibar_get_locations', array( $this, 'idx_omnibar_get_locations' ) );
-		add_action( 'idx_migrate_old_table', array( $this, 'migrate_old_table' ) );
-		add_action( 'wp_loaded', array( $this, 'legacy_functions' ) );
+		add_action( 'wp_loaded', [ $this, 'schedule_omnibar_update' ] );
+		add_action( 'idx_omnibar_get_locations', [ $this, 'idx_omnibar_get_locations' ] );
+		add_action( 'idx_migrate_old_table', [ $this, 'migrate_old_table' ] );
+		add_action( 'wp_loaded', [ $this, 'legacy_functions' ] );
 
-		add_action( 'plugins_loaded', array( $this, 'idx_extensions' ) );
-		add_action( 'plugins_loaded', array( $this, 'add_notices' ) );
+		add_action( 'plugins_loaded', [ $this, 'idx_extensions' ] );
+		add_action( 'plugins_loaded', [ $this, 'add_notices' ] );
 
-		add_action( 'rest_api_init', array( $this, 'idx_broker_register_rest_routes' ) );
+		add_action( 'rest_api_init', [ $this, 'idx_broker_register_rest_routes' ] );
 
 		$social_pro = new \IDX\Social_Pro();
 		$social_pro->initialize_hooks();
@@ -172,7 +172,7 @@ class Initiate_Plugin {
 			// clear old api cache
 			$this->idx_api->idx_clean_transients();
 			$this->idx_omnibar_get_locations();
-			return add_action( 'wp_loaded', array( $this, 'schedule_migrate_old_table' ) );
+			return add_action( 'wp_loaded', [ $this, 'schedule_migrate_old_table' ] );
 		}
 	}
 
@@ -353,12 +353,12 @@ class Initiate_Plugin {
 			\IDX\Views\Notice::menu_text_notice( 'IMPress', $notice_num ),
 			'administrator',
 			'idx-broker',
-			array( $this, 'idx_broker_platinum_admin_page' ),
+			[ $this, 'idx_broker_platinum_admin_page' ],
 			'none',
 			55.572
 		);
-		add_submenu_page( 'idx-broker', 'IMPress for IDX Broker Plugin Options', 'General Settings', 'administrator', 'idx-broker', array( $this, 'idx_broker_platinum_admin_page' ) );
-		add_action( 'admin_footer', array( $this, 'add_upgrade_center_link' ) );
+		add_submenu_page( 'idx-broker', 'IMPress for IDX Broker Plugin Options', 'General Settings', 'administrator', 'idx-broker', [ $this, 'idx_broker_platinum_admin_page' ] );
+		add_action( 'admin_footer', [ $this, 'add_upgrade_center_link' ] );
 	}
 
 	/**
@@ -374,64 +374,62 @@ class Initiate_Plugin {
 
 		// Set top level URL to guided setup if API key is not set, general settings if set.
 		$settings_url = empty( $this->idx_api->api_key ) ? 'admin.php?page=idx-broker#/guided-setup/welcome' : 'admin.php?page=idx-broker#/settings/general';
-		$args = array(
+		$args = [
 			'id'     => 'idx_admin_bar_menu',
 			'title'  => '<span class="ab-icon properticons-logo-idx"></span>IMPress',
 			'parent' => false,
 			'href'   => admin_url( $settings_url ),
-		);
+		];
 		$wp_admin_bar->add_node( $args );
 
 		// Guided Setup page if no API key is set.
 		if ( empty( $this->idx_api->api_key ) ) {
-			$args = array(
+			$args = [
 				'id'     => 'idx_admin_bar_menu_item_0',
 				'title'  => 'Guided Setup',
 				'parent' => 'idx_admin_bar_menu',
-				'href'   => admin_url( $settings_url )
-			);
+				'href'   => admin_url( $settings_url ),
+			];
 			$wp_admin_bar->add_node( $args );
 		}
 
 		// General Settings page.
-		$args = array(
+		$args = [
 			'id'     => 'idx_admin_bar_menu_item_1',
 			'title'  => 'General Settings',
 			'parent' => 'idx_admin_bar_menu',
 			'href'   => admin_url( 'admin.php?page=idx-broker#/settings/general' ),
-		);
+		];
 		$wp_admin_bar->add_node( $args );
 
 		// Knowledge Base link.
-		$args = array(
+		$args = [
 			'id'     => 'idx_admin_bar_menu_item_2',
 			'title'  => 'Knowledgebase',
 			'parent' => 'idx_admin_bar_menu',
 			'href'   => 'http://support.idxbroker.com',
-			'meta'   => array( 'target' => '_blank' ),
-		);
+			'meta'   => [ 'target' => '_blank' ],
+		];
 		$wp_admin_bar->add_node( $args );
 
 		// IDXB Control Panel link.
-		$args = array(
+		$args = [
 			'id'     => 'idx_admin_bar_menu_item_3',
 			'title'  => 'IDX Control Panel',
 			'parent' => 'idx_admin_bar_menu',
 			'href'   => 'https://middleware.idxbroker.com/mgmt/login',
-			'meta'   => array( 'target' => '_blank' ),
-		);
+			'meta'   => [ 'target' => '_blank' ],
+		];
 		$wp_admin_bar->add_node( $args );
 
 		// Upgrade prompt link for Lite account users.
-		$args = array(
+		$args = [
 			'id'     => 'idx_admin_bar_menu_item_5',
 			'title'  => 'Upgrade Account <svg width="8" height="10" class="update-plugins" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1675 971q0 51-37 90l-75 75q-38 38-91 38-54 0-90-38l-294-293v704q0 52-37.5 84.5t-90.5 32.5h-128q-53 0-90.5-32.5t-37.5-84.5v-704l-294 293q-36 38-90 38t-90-38l-75-75q-38-38-38-90 0-53 38-91l651-651q35-37 90-37 54 0 91 37l651 651q37 39 37 91z" fill="#fff"/></svg>',
 			'parent' => 'idx_admin_bar_menu',
 			'href'   => 'https://middleware.idxbroker.com/mgmt/upgrade',
-			'meta'   => array(
-				'target' => '_blank',
-			),
-		);
+			'meta'   => [ 'target' => '_blank' ],
+		];
 		if ( ! $this->idx_api->platinum_account_type() ) {
 			$wp_admin_bar->add_node( $args );
 		}
@@ -531,20 +529,20 @@ EOD;
 			return;
 		}
 
-		// Get all active notices and store in object, need this state for the sidebar notice icon
+		// Get all active notices and store in object, need this state for the sidebar notice icon.
 		$this->notices = Notice\Notice_Handler::get_all_notices();
 
-		// If no notices, return
+		// If no notices, return.
 		if ( count( $this->notices ) < 1 ) {
 			return;
 		}
 
-		// Create admin_notice box for each notice
+		// Create admin_notice box for each notice.
 		foreach ( $this->notices as $notice ) {
-			add_action( 'admin_notices', array( $notice, 'create_notice' ) );
+			add_action( 'admin_notices', [ $notice, 'create_notice' ] );
 		}
 
-		add_action( 'wp_ajax_idx_dismissed', array( '\IDX\Notice\Notice_Handler', 'dismissed' ) );
+		add_action( 'wp_ajax_idx_dismissed', [ '\IDX\Notice\Notice_Handler', 'dismissed' ] );
 	}
 
 	/**

@@ -122,7 +122,7 @@ class Idx_Widget_Class extends \WP_Widget {
 	 * @return [array]               [new vals w/ tags stripped]
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$return             = array();
+		$return             = [];
 		$return['title']    = strip_tags( $new_instance['title'] );
 		$return['text']     = strip_tags( $new_instance['text'] );
 		$return['textarea'] = strip_tags( $new_instance['textarea'] );

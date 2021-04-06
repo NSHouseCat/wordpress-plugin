@@ -206,7 +206,7 @@ class Register_Shortcode_For_Ui {
 		// mimic the default_shortcodes array to make it work.
 		$other_shortcodes = do_action( 'idx-register-shortcode-ui' );
 		if ( empty( $other_shortcodes ) ) {
-			$other_shortcodes = array();
+			$other_shortcodes = [];
 		}
 		return array_merge( $this->default_shortcodes(), $other_shortcodes );
 
@@ -717,7 +717,7 @@ class Register_Shortcode_For_Ui {
 	 * @return void
 	 */
 	public function get_agents_select_list( $agent_id ) {
-		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
 
 		if ( ! is_array( $agents_array ) ) {
 			return;

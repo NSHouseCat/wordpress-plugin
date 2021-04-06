@@ -148,7 +148,7 @@ class WP_Listings_Featured_Listings_Widget extends WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	function update( $new_instance, $old_instance ) {
-		$instance = array();
+		$instance = [];
 		$instance['title']          = strip_tags( $new_instance['title'] );
 		$instance['posts_per_page'] = (int) $new_instance['posts_per_page'];
 		$instance['image_size'] 	= strip_tags($new_instance['image_size'] );

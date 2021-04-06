@@ -247,8 +247,8 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 		foreach ( $mls_list as $mls ) {
 			$idx_id                    = $mls->id;
 			$mls_name                  = $mls->name;
-			$fields                    = $idx_api->idx_api( "searchfields/$idx_id", $idx_api->idx_api_get_apiversion(), 'mls', array(), 86400 );
-			$property_types            = $idx_api->idx_api( "propertytypes/$idx_id", $idx_api->idx_api_get_apiversion(), 'mls', array(), 86400 );
+			$fields                    = $idx_api->idx_api( "searchfields/$idx_id", $idx_api->idx_api_get_apiversion(), 'mls', [], 86400 );
+			$property_types            = $idx_api->idx_api( "propertytypes/$idx_id", $idx_api->idx_api_get_apiversion(), 'mls', [], 86400 );
 			$mls_object                = new \IDX\Widgets\Omnibar\Advanced_Fields( $idx_id, $mls_name, $fields, $property_types );
 			$mls_fields_object         = $mls_object->return_fields();
 			$mls_property_types_object = $mls_object->return_mlsPtIDs();

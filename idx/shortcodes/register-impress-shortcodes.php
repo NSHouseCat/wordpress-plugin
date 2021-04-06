@@ -101,10 +101,10 @@ class Register_Impress_Shortcodes {
 	 * property_showcase_shortcode function.
 	 *
 	 * @access public
-	 * @param array $atts (default: array())
+	 * @param array $atts (default: [])
 	 * @return void
 	 */
-	public function property_showcase_shortcode( $atts = array() ) {
+	public function property_showcase_shortcode( $atts = [] ) {
 		extract(
 			shortcode_atts(
 				array(
@@ -246,7 +246,7 @@ class Register_Impress_Shortcodes {
 			}
 
 			if ( has_filter( 'impress_showcase_property_url_suffix' ) ) {
-				$url = $url . apply_filters( 'impress_showcase_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
+				$url = $url . apply_filters( 'impress_showcase_property_url_suffix', $suffix = http_build_query( [] ), $prop, $this->idx_api );
 			}
 
 			if ( 1 == $show_image ) {
@@ -478,11 +478,11 @@ class Register_Impress_Shortcodes {
 	 * property_carousel_shortcode function.
 	 *
 	 * @access public
-	 * @param array $atts (default: array())
+	 * @param array $atts (default: [])
 	 * @return void
 	 */
-	public function property_carousel_shortcode( $atts = array() ) {
-		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+	public function property_carousel_shortcode( $atts = [] ) {
+		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', [], '5.8.2' );
 
 		extract(
 			shortcode_atts(
@@ -624,7 +624,7 @@ class Register_Impress_Shortcodes {
 			}
 
 			if ( has_filter( 'impress_carousel_property_url_suffix' ) ) {
-				$url = $url . apply_filters( 'impress_carousel_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
+				$url = $url . apply_filters( 'impress_carousel_property_url_suffix', $suffix = http_build_query( [] ), $prop, $this->idx_api );
 			}
 
 			$output .= apply_filters(
@@ -683,10 +683,10 @@ class Register_Impress_Shortcodes {
 	 * city_links_shortcode function.
 	 *
 	 * @access public
-	 * @param array $atts (default: array())
+	 * @param array $atts (default: [])
 	 * @return void
 	 */
-	public function city_links_shortcode( $atts = array() ) {
+	public function city_links_shortcode( $atts = [] ) {
 		extract(
 			shortcode_atts(
 				array(

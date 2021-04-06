@@ -277,7 +277,7 @@ add_action( 'pre_get_posts', 'impress_agents_post_number' );
  * Add Employees to "At a glance" Dashboard widget
  */
 add_filter( 'dashboard_glance_items', 'impress_agents_glance_items', 10, 1 );
-function impress_agents_glance_items( $items = array() ) {
+function impress_agents_glance_items( $items = [] ) {
 
 	$post_types = array( 'employee' );
 

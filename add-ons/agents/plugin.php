@@ -37,7 +37,7 @@ function impress_agents_init() {
 		$options = get_option('plugin_impress_agents_settings');
 
 		/** Register Font Awesome icons but don't enqueue them */
-		wp_register_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_register_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', [], '5.8.2' );
 		
 		if ( !isset($options['impress_agents_stylesheet_load']) ) {
 			$options['impress_agents_stylesheet_load'] = 0;
@@ -66,10 +66,10 @@ function impress_agents_init() {
 			]
 		);
 
-		$localize_script = array(
+		$localize_script = [
 			'title'        => __( 'Set Term Image', 'impress_agents' ),
 			'button'       => __( 'Set term image', 'impress_agents' )
-		);
+		];
 
 		/* Pass custom variables to the script. */
 		wp_localize_script( 'impress-agents-admin', 'impa_term_image', $localize_script );
@@ -104,7 +104,7 @@ function impress_agents_migrate() {
  */
 function impress_agents_register_widgets() {
 
-	$widgets = array( 'IMPress_Agents_Widget' );
+	$widgets = [ 'IMPress_Agents_Widget' ];
 
 	foreach ( (array) $widgets as $widget ) {
 		register_widget( $widget );

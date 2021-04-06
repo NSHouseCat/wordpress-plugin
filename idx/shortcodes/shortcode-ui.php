@@ -55,13 +55,13 @@ class Shortcode_Ui {
 			return;
 		}
 
-		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
-		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
-		wp_enqueue_script( 'idx-shortcode', plugins_url( '../assets/js/idx-shortcode.min.js', dirname( __FILE__ ) ), array( 'jquery' ) );
+		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', [], '4.0.5', 'all'  );
+		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', [ 'jquery' ], '4.0.5', true );
+		wp_enqueue_script( 'idx-shortcode', plugins_url( '../assets/js/idx-shortcode.min.js', dirname( __FILE__ ) ), [ 'jquery' ] );
 		wp_enqueue_style( 'idx-shortcode', plugins_url( '../assets/css/idx-shortcode.min.css', dirname( __FILE__ ) ) );
-		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', [], '5.8.2' );
 		// scripts and styles for map search widget preview
-		wp_enqueue_script( 'custom-scriptLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', array() );
+		wp_enqueue_script( 'custom-scriptLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', [] );
 		wp_enqueue_script( 'custom-scriptLeafDraw', '//d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', array( 'custom-scriptLeaf' ) );
 		wp_enqueue_script( 'custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', array( 'custom-scriptLeaf', 'custom-scriptLeafDraw' ) );
 		wp_enqueue_style( 'cssLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css' );
@@ -117,7 +117,7 @@ class Shortcode_Ui {
 	public function get_shortcodes_for_ui() {
 		$other_shortcodes = do_action( 'idx-register-shortcode-ui' );
 		if ( empty( $other_shortcodes ) ) {
-			$other_shortcodes = array();
+			$other_shortcodes = [];
 		}
 		return array_merge( $shortcodes_for_ui->default_shortcodes(), $other_shortcodes );
 

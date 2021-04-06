@@ -113,7 +113,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance                   = array();
+		$instance                   = [];
 		$instance['title']          = strip_tags( $new_instance['title'] );
 		$instance['city_list']      = strip_tags( $new_instance['city_list'] );
 		$instance['mls']            = strip_tags( $new_instance['mls'] );
@@ -308,7 +308,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 
 		$count = 0;
 
-		$cities_list = array();
+		$cities_list = [];
 
 		foreach ( $cities as $city ) {
 
@@ -378,7 +378,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	 * @return int               The total number of occurances.
 	 */
 	public static function get_cumulative_property_count_from_mls( $city_id, $idx_id, $idx_api ) {
-		 $mls_cities = $idx_api->idx_api( 'cities/' . $idx_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 24, 'GET', true );
+		 $mls_cities = $idx_api->idx_api( 'cities/' . $idx_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', [], 60 * 60 * 24, 'GET', true );
 
 		// Loop through cities and add number to $occurances if $city_id matches.
 		$occurances = 0;

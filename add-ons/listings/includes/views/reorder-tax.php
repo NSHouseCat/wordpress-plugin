@@ -27,7 +27,7 @@ function wp_listings_tax_reorder() {
 
 	if($_POST) {
 		$new_order = $_POST['wplistings-tax'];
-		$wp_listings_taxes_reordered = array();
+		$wp_listings_taxes_reordered = [];
 		foreach( $new_order as $tax ) {
 			if($wp_listings_taxes[$tax])
 				$wp_listings_taxes_reordered[$tax] = $wp_listings_taxes[$tax];	

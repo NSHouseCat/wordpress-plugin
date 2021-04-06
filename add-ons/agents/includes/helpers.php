@@ -84,7 +84,7 @@ function impress_agents_paging_nav() {
 
 	$paged        = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
 	$pagenum_link = html_entity_decode( get_pagenum_link() );
-	$query_args   = array();
+	$query_args   = [];
 	$url_parts    = explode( '?', $pagenum_link );
 
 	if ( isset( $url_parts[1] ) ) {
@@ -140,7 +140,7 @@ function impress_agents_get_additional_image_sizes() {
 	if ( $_wp_additional_image_sizes )
 		return $_wp_additional_image_sizes;
 
-	return array();
+	return [];
 
 }
 

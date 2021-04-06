@@ -91,7 +91,7 @@ class Get_Locations {
 	 * @return void
 	 */
 	public function get_idxIDs( $array ) {
-		$idxIDs = array();
+		$idxIDs = [];
 		foreach ( $array as $field ) {
 			$idxID = $field['idxID'];
 			if ( ! in_array( $idxID, $idxIDs ) ) {
@@ -124,7 +124,7 @@ class Get_Locations {
 			}
 			if ( $idxIDMatch === $idxID ) {
 				$first_run_for_idxID = false;
-				$field_values        = json_encode( $this->idx_api->idx_api( "searchfieldvalues/$idxID?mlsPtID=$mlsPtID&name=$name", $this->idx_api->idx_api_get_apiversion(), 'mls', array(), 86400 ) );
+				$field_values        = json_encode( $this->idx_api->idx_api( "searchfieldvalues/$idxID?mlsPtID=$mlsPtID&name=$name", $this->idx_api->idx_api_get_apiversion(), 'mls', [], 86400 ) );
 				$output             .= "$prefix $field_values }";
 			}
 		}
@@ -148,7 +148,7 @@ class Get_Locations {
 
 	// for display on the front end.
 	public function create_custom_fields_key() {
-		$custom_fields_key = array();
+		$custom_fields_key = [];
 		$fields            = get_option( 'idx_omnibar_custom_fields' );
 		if ( empty( $fields ) ) {
 			return 'var customFieldsKey = {}; ';
@@ -253,15 +253,15 @@ class Get_Locations {
 	// Performs a wp_remote_get then does the database insert. Should do one huge insert.
 	private function address_table_insert( $mls, $parent_id ) {
 
-		$args = array(
-			'headers' => array(
+		$args = [
+			'headers' => [
 				'Content-Type' => 'application/x-www-form-urlencoded',
 				'accesskey'    => get_option( 'idx_broker_apikey' ),
 				'apiversion'   => \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION,
 				'outputtype'   => 'json',
-			),
+			],
 			'timeout' => 120,
-		);
+		];
 
 		$response = wp_remote_get( "https://api.idxbroker.com/mls/searchfieldvalues/$mls?mlsPtID=$parent_id&name=address", $args );
 

@@ -337,7 +337,7 @@ class Idx_Pages {
 	 * @return void
 	 */
 	public function get_all_api_idx_uids( $idx_pages ) {
-		$uids = array();
+		$uids = [];
 		foreach ( $idx_pages as $idx_page ) {
 			$uids[] = $idx_page->uid;
 		}
@@ -460,7 +460,7 @@ class Idx_Pages {
 			)
 		);
 
-		$existing = array();
+		$existing = [];
 
 		if ( empty( $posts ) ) {
 			return $existing;
@@ -566,8 +566,8 @@ class Idx_Pages {
 		// when saving a post, save the meta of which wrapper is set
 		wp_nonce_field( 'idx-wrapper-page', 'idx-wrapper-page-nonce' );
 		$this->wrapper_page_dropdown();
-		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all' );
-		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
+		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', [], '4.0.5', 'all' );
+		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', [ 'jquery' ], '4.0.5', true );
 		wp_enqueue_script( 'idx-wrapper', plugins_url( '../assets/js/idx-wrappers.min.js', __FILE__ ) );
 	}
 

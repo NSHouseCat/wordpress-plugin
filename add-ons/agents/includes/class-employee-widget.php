@@ -84,8 +84,8 @@ class IMPress_Agents_Widget extends WP_Widget {
 	}
 
 	function update( $new_instance, $old_instance ) {
-		$instance = array();
-		$instance['title'] = strip_tags( $new_instance['title'] );
+		$instance                = [];
+		$instance['title']       = strip_tags( $new_instance['title'] );
 		$instance['show_number'] = (int)$new_instance['show_number'];
 
 		return $new_instance;

@@ -134,7 +134,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance                   = array();
+		$instance                   = [];
 		$instance['title']          = strip_tags( $new_instance['title'] );
 		$instance['custom_text']    = htmlentities( $new_instance['custom_text'] );
 		$instance['styles']         = (int) $new_instance['styles'];

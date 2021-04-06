@@ -82,7 +82,7 @@ class Idx_Middleware_Widget extends \WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance           = array();
+		$instance           = [];
 		$instance['title']  = strip_tags( $new_instance['title'] );
 		$instance['widget'] = esc_url_raw( $new_instance['widget'] );
 
